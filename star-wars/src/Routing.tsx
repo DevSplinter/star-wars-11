@@ -1,22 +1,29 @@
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import People from './pages/People';
-import Person from './pages/Person';
-import NotFound from './pages/notFound';
+import Login from './components/pages/Login';
+import People from './components/pages/People';
+import Person from './components/pages/Person';
+import NotFound from './components/pages/notFound';
+import PrivateRoute from './components/PrivateRoute';
 
-const Routing = () => {
+interface RoutingProps {
+  isAuthenticated: boolean;
+  signIn: () => void;
+}
+
+const Routing: React.FC<RoutingProps> = ({ isAuthenticated, signIn }) => {
   return (
     <Router>
       <Switch>
-        <Route path="/people">
+        <PrivateRoute isAuthenticated={isAuthenticated} path="/people">
           <People />
-        </Route>
+        </PrivateRoute>
         <Route path="/login">
-          <Login />
+          <Login signIn={signIn} />
         </Route>
-        <Route path="/person/:id">
+        <PrivateRoute isAuthenticated={isAuthenticated} path="/person/:id">
           <Person />
-        </Route>
+        </PrivateRoute>
         <Route path="*">
           <NotFound />
         </Route>
