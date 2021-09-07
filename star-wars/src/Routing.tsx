@@ -1,5 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import Login from './components/pages/Login';
 import People from './components/pages/People';
 import Person from './components/pages/Person';
@@ -15,13 +20,16 @@ const Routing: React.FC<RoutingProps> = ({ isAuthenticated, signIn }) => {
   return (
     <Router>
       <Switch>
-        <PrivateRoute isAuthenticated={isAuthenticated} path="/people">
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
+        <PrivateRoute isAuthenticated={isAuthenticated} path="/characters">
           <People />
         </PrivateRoute>
         <Route path="/login">
           <Login signIn={signIn} />
         </Route>
-        <PrivateRoute isAuthenticated={isAuthenticated} path="/person/:id">
+        <PrivateRoute isAuthenticated={isAuthenticated} path="/characters/:id">
           <Person />
         </PrivateRoute>
         <Route path="*">

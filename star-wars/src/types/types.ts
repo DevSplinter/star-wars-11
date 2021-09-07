@@ -1,4 +1,4 @@
-export interface IPerson {
+export interface IPersonDTO {
   birth_year: string;
   created: string;
   edited: string;
@@ -17,9 +17,17 @@ export interface IPerson {
   vehicles: string;
 }
 
-export interface IPeople {
+export interface IPerson extends IPersonDTO {
+  id: string;
+}
+
+export interface IPeopleDTO {
   count: number;
   next: string | null;
   previous: string | null;
-  result: IPerson[];
+  results: IPersonDTO[];
+}
+
+export interface IPeople extends IPeopleDTO {
+  results: IPerson[];
 }
