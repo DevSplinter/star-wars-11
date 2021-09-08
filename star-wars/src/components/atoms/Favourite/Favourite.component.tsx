@@ -1,4 +1,5 @@
 import React from 'react';
+import { FavouriteWrapper } from './Favourite.styles';
 
 interface FavouriteProps {
   updateFavourite: (personId: string) => void;
@@ -11,10 +12,18 @@ const Favourite: React.FC<FavouriteProps> = ({
   isFavourite,
   personId,
 }) => {
+  const handleOnClick = (
+    event: React.MouseEvent<HTMLElement>,
+    personId: string
+  ) => {
+    event.stopPropagation();
+    updateFavourite(personId);
+  };
+
   return (
-    <div onClick={() => updateFavourite(personId)}>
+    <FavouriteWrapper onClick={(event) => handleOnClick(event, personId)}>
       {isFavourite(personId) ? <div>favourite</div> : <div>not favourite</div>}
-    </div>
+    </FavouriteWrapper>
   );
 };
 

@@ -4,17 +4,18 @@ import React from 'react';
 interface PrivateRouteProps {
   isAuthenticated: boolean;
   path: string;
+  exact?: boolean;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
   children,
   isAuthenticated,
-  path,
+  ...rest
 }) => {
   const location = useLocation();
 
   return (
-    <Route path={path}>
+    <Route {...rest}>
       {isAuthenticated ? (
         children
       ) : (

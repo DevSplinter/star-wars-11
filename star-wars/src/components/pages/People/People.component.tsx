@@ -1,7 +1,7 @@
 import React from 'react';
-import { useFetchPeople, usePageChange } from './People.hooks';
+import { useHistory } from 'react-router-dom';
+import { useFetchPeople, usePageChange, useSearch } from './People.hooks';
 import {
-  Hidden,
   Paper,
   Table,
   TableBody,
@@ -10,6 +10,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
 } from '@material-ui/core';
 import Favourite from '../../atoms/Favourite';
 import { useFavourites } from '../../../hooks/useFavourites';
@@ -17,12 +18,20 @@ import { useFavourites } from '../../../hooks/useFavourites';
 interface PeopleProps {}
 
 const People: React.FC<PeopleProps> = ({}) => {
-  const { people, getPeople } = useFetchPeople();
-  const { page, handlePageChange } = usePageChange(getPeople);
+  const { people, getPeople, setPeople } = useFetchPeople();
+  const { page, handlePageChange } = usePageChange(getPeople, people?.count);
   const { isFavourite, updateFavourites } = useFavourites();
+  const { searchText, setSearchText } = useSearch(setPeople);
+  const history = useHistory();
 
   return (
     <Paper>
+      <TextField
+        label="Search"
+        variant="outlined"
+        value={searchText}
+        onChange={(event) => setSearchText(event.target.value)}
+      />
       <TableContainer>
         <Table stickyHeader>
           <TableHead>
@@ -30,35 +39,38 @@ const People: React.FC<PeopleProps> = ({}) => {
               <TableCell>Name</TableCell>
               <TableCell>Birth Year</TableCell>
               <TableCell>Height</TableCell>
-              <Hidden mdDown>
-                <TableCell>Favourite</TableCell>
-              </Hidden>
+              <TableCell>Favourite</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {people?.results?.map((person) => (
-              <TableRow hover key={person.url}>
+              <TableRow
+                hover
+                key={person.url}
+                onClick={() => history.push(`characters/${person.id}`)}
+              >
                 <TableCell>{person.name}</TableCell>
                 <TableCell>{person.birth_year}</TableCell>
                 <TableCell>{person.height}</TableCell>
-                <Hidden mdDown>
-                  <TableCell>
-                    <Favourite
-                      personId={person.id}
-                      updateFavourite={updateFavourites}
-                      isFavourite={isFavourite}
-                    />
-                  </TableCell>
-                </Hidden>
+                <TableCell>
+                  <Favourite
+                    personId={person.id}
+                    updateFavourite={updateFavourites}
+                    isFavourite={isFavourite}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
+        component="div"
         count={people?.count || 0}
         page={page}
-        onPageChange={handlePageChange}
+        onPageChange={(_event, newPage) =>
+          handlePageChange(newPage, people)
+        }
         rowsPerPage={10}
         rowsPerPageOptions={[10]}
       />

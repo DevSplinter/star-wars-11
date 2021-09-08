@@ -23,15 +23,24 @@ const Routing: React.FC<RoutingProps> = ({ isAuthenticated, signIn }) => {
         <Route exact path="/">
           <Redirect to="/login" />
         </Route>
-        <PrivateRoute isAuthenticated={isAuthenticated} path="/characters">
+        <PrivateRoute
+          isAuthenticated={isAuthenticated}
+          path="/characters"
+          exact
+        >
           <People />
         </PrivateRoute>
         <Route path="/login">
           <Login signIn={signIn} />
         </Route>
-        <PrivateRoute isAuthenticated={isAuthenticated} path="/characters/:id">
-          <Person />
-        </PrivateRoute>
+        <PrivateRoute
+          isAuthenticated={isAuthenticated}
+          path="/characters/:id"
+          children={<Person />}
+        />
+        <Route path="/not-found">
+          <NotFound />
+        </Route>
         <Route path="*">
           <NotFound />
         </Route>
