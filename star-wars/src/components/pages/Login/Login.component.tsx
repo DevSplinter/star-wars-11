@@ -1,14 +1,11 @@
 import React from 'react';
 import { LoginWrapper, StyledForm } from './Login.styles';
 import { Button, Card, TextField } from '@material-ui/core';
-import { ISignIn } from '../../../types/types';
 import { useLogin } from './Login.hooks';
 
-interface LoginProps {
-  signIn: ({ login, password }: ISignIn) => boolean;
-}
+interface LoginProps {}
 
-const Login: React.FC<LoginProps> = ({ signIn }) => {
+const Login: React.FC<LoginProps> = () => {
   const helperText = 'Login and/or password are incorrect. Please try again.';
   const {
     isError,
@@ -17,7 +14,7 @@ const Login: React.FC<LoginProps> = ({ signIn }) => {
     handleLoginChange,
     handlePasswordChange,
     handleOnSubmit,
-  } = useLogin(signIn);
+  } = useLogin();
 
   return (
     <LoginWrapper>

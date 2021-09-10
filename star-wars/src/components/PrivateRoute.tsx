@@ -1,17 +1,17 @@
 import { Redirect, Route, useLocation } from 'react-router-dom';
-import React from 'react';
+import React, { useContext } from 'react';
+import { authContext } from '../context/authContext';
 
 interface PrivateRouteProps {
-  isAuthenticated: boolean;
   path: string;
   exact?: boolean;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
   children,
-  isAuthenticated,
   ...rest
 }) => {
+  const { isAuthenticated } = useContext(authContext);
   const location = useLocation();
 
   return (

@@ -11,14 +11,10 @@ import Person from './pages/Person';
 import NotFound from './pages/notFound';
 import PrivateRoute from './PrivateRoute';
 import { PATHS } from '../const/paths';
-import { ISignIn } from '../types/types';
 
-interface RoutingProps {
-  isAuthenticated: boolean;
-  signIn: ({ login, password }: ISignIn) => boolean;
-}
+interface RoutingProps {}
 
-const Routing: React.FC<RoutingProps> = ({ isAuthenticated, signIn }) => {
+const Routing: React.FC<RoutingProps> = () => {
   return (
     <Router>
       <Switch>
@@ -26,17 +22,15 @@ const Routing: React.FC<RoutingProps> = ({ isAuthenticated, signIn }) => {
           <Redirect to={PATHS.CHARACTERS} />
         </Route>
         <PrivateRoute
-          isAuthenticated={isAuthenticated}
           path={PATHS.CHARACTERS}
           exact
         >
           <People />
         </PrivateRoute>
         <Route path={PATHS.LOGIN}>
-          <Login signIn={signIn} />
+          <Login />
         </Route>
         <PrivateRoute
-          isAuthenticated={isAuthenticated}
           path={PATHS.CHARACTER}
           children={<Person />}
         />

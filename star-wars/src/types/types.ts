@@ -3,6 +3,12 @@ export interface ISignIn {
   password: string;
 }
 
+export interface IAuthContext {
+  isAuthenticated: boolean;
+  signIn: ({ login, password }: ISignIn) => boolean;
+  signOut: () => void;
+}
+
 export interface IPersonDTO {
   birth_year: string;
   created: string;

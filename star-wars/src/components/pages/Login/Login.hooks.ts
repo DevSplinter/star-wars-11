@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { PATHS } from '../../../const/paths';
-import { ISignIn } from '../../../types/types';
 import { useHistory } from 'react-router-dom';
+import { authContext } from '../../../context/authContext';
 
-export const useLogin = (signIn: ({ login, password }: ISignIn) => boolean) => {
+export const useLogin = () => {
+  const { signIn } = useContext(authContext);
   const history = useHistory();
 
   const [login, setLogin] = useState('');

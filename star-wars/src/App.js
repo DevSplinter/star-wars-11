@@ -6,9 +6,11 @@ import { ThemeProvider } from 'styled-components';
 import Routing from './components/Routing';
 import { useAuth } from './hooks/useAuth';
 import Layout from './components/layout';
+import { authContext } from './context/authContext';
 
 function App() {
-  const { isAuthenticated, signIn, signOut } = useAuth();
+  const auth = useAuth();
+
   const theme = createTheme({
     palette: {
       type: 'dark',
@@ -41,9 +43,11 @@ function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <ThemeProvider theme={theme}>
-        <Layout signOut={signOut} isAuthenticated={isAuthenticated}>
-          <Routing isAuthenticated={isAuthenticated} signIn={signIn} />
-        </Layout>
+        <authContext.Provider value={auth}>
+          <Layout>
+            <Routing />
+          </Layout>
+        </authContext.Provider>
       </ThemeProvider>
     </MuiThemeProvider>
   );
