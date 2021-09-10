@@ -5,15 +5,17 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import Login from './components/pages/Login';
-import People from './components/pages/People';
-import Person from './components/pages/Person';
-import NotFound from './components/pages/notFound';
-import PrivateRoute from './components/PrivateRoute';
+import Login from './pages/Login';
+import People from './pages/People';
+import Person from './pages/Person';
+import NotFound from './pages/notFound';
+import PrivateRoute from './PrivateRoute';
+import { PATHS } from '../const/paths';
+import { ISignIn } from '../types/types';
 
 interface RoutingProps {
   isAuthenticated: boolean;
-  signIn: () => void;
+  signIn: ({ login, password }: ISignIn) => boolean;
 }
 
 const Routing: React.FC<RoutingProps> = ({ isAuthenticated, signIn }) => {
@@ -21,24 +23,24 @@ const Routing: React.FC<RoutingProps> = ({ isAuthenticated, signIn }) => {
     <Router>
       <Switch>
         <Route exact path="/">
-          <Redirect to="/login" />
+          <Redirect to={PATHS.CHARACTERS} />
         </Route>
         <PrivateRoute
           isAuthenticated={isAuthenticated}
-          path="/characters"
+          path={PATHS.CHARACTERS}
           exact
         >
           <People />
         </PrivateRoute>
-        <Route path="/login">
+        <Route path={PATHS.LOGIN}>
           <Login signIn={signIn} />
         </Route>
         <PrivateRoute
           isAuthenticated={isAuthenticated}
-          path="/characters/:id"
+          path={PATHS.CHARACTER}
           children={<Person />}
         />
-        <Route path="/not-found">
+        <Route path={PATHS.NOT_FOUND}>
           <NotFound />
         </Route>
         <Route path="*">

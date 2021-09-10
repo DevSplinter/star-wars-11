@@ -3,7 +3,7 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from '@material-ui/core/styles';
 import { ThemeProvider } from 'styled-components';
-import Routing from './Routing';
+import Routing from './components/Routing';
 import { useAuth } from './hooks/useAuth';
 import Layout from './components/layout';
 
@@ -13,12 +13,35 @@ function App() {
     palette: {
       type: 'dark',
     },
+    overrides: {
+      MuiTextField: {
+        root: {
+          '& label.Mui-focused': {
+            color: '#fff',
+          },
+          '& .MuiInput-underline:after': {
+            borderBottomColor: '#fff',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#bbb',
+            },
+            '&:hover fieldset': {
+              borderColor: '#faf3c0',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#fff',
+            },
+          },
+        },
+      },
+    },
   });
 
   return (
     <MuiThemeProvider theme={theme}>
       <ThemeProvider theme={theme}>
-        <Layout>
+        <Layout signOut={signOut} isAuthenticated={isAuthenticated}>
           <Routing isAuthenticated={isAuthenticated} signIn={signIn} />
         </Layout>
       </ThemeProvider>

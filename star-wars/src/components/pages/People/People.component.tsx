@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import Favourite from '../../atoms/Favourite';
 import { useFavourites } from '../../../hooks/useFavourites';
+import { PATHS } from '../../../const/paths';
 
 interface PeopleProps {}
 
@@ -47,7 +48,7 @@ const People: React.FC<PeopleProps> = ({}) => {
               <TableRow
                 hover
                 key={person.url}
-                onClick={() => history.push(`characters/${person.id}`)}
+                onClick={() => history.push(`${PATHS.CHARACTERS}/${person.id}`)}
               >
                 <TableCell>{person.name}</TableCell>
                 <TableCell>{person.birth_year}</TableCell>
@@ -68,9 +69,7 @@ const People: React.FC<PeopleProps> = ({}) => {
         component="div"
         count={people?.count || 0}
         page={page}
-        onPageChange={(_event, newPage) =>
-          handlePageChange(newPage, people)
-        }
+        onPageChange={(_event, newPage) => handlePageChange(newPage, people)}
         rowsPerPage={10}
         rowsPerPageOptions={[10]}
       />

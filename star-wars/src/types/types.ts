@@ -1,3 +1,8 @@
+export interface ISignIn {
+  login: string;
+  password: string;
+}
+
 export interface IPersonDTO {
   birth_year: string;
   created: string;

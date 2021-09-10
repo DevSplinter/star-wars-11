@@ -10,9 +10,7 @@ export const useFetchPeople = () => {
   const [people, setPeople] = useState<IPeople>();
   const getPeople = async (url?: string) => {
     try {
-      const people = url
-        ? await fetchPeople(url)
-        : await fetchPeople();
+      const people = url ? await fetchPeople(url) : await fetchPeople();
       const peopleWithIds = {
         ...people,
         results: people.results.map((person) => ({
@@ -38,10 +36,7 @@ export const usePageChange = (
   peopleCount: number | undefined
 ) => {
   const [page, setPage] = useState(0);
-  const handlePageChange = (
-    newPage: number,
-    people: IPeople | undefined
-  ) => {
+  const handlePageChange = (newPage: number, people: IPeople | undefined) => {
     if (newPage > page) {
       people?.next && getPeople(people.next);
     } else {
@@ -61,16 +56,18 @@ export const useSearch = (setPeople: (people: IPeople) => void) => {
   const [searchText, setSearchText] = useState('');
 
   const getSearchResult = async () => {
-    const searchResponse = await fetchPeopleSearchResult(searchText);
-    const searchResponseWithIds = {
-      ...searchResponse,
-      results: searchResponse.results.map((person) => ({
-        ...person,
-        id: extractPersonId(person.url),
-      })),
-    } as IPeople;
+    if (searchText !== '') {
+      const searchResponse = await fetchPeopleSearchResult(searchText);
+      const searchResponseWithIds = {
+        ...searchResponse,
+        results: searchResponse.results.map((person) => ({
+          ...person,
+          id: extractPersonId(person.url),
+        })),
+      } as IPeople;
 
-    setPeople(searchResponseWithIds);
+      setPeople(searchResponseWithIds);
+    }
   };
 
   useEffect(() => {
