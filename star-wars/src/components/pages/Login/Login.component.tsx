@@ -40,7 +40,9 @@ const Login: React.FC<LoginProps> = () => {
             fullWidth
             onChange={handlePasswordChange}
           />
-          <Button onClick={handleOnSubmit} variant="outlined" size="large">Login</Button>
+          <Button onClick={handleOnSubmit} variant="outlined" size="large">
+            Login
+          </Button>
         </StyledForm>
       </StyledCard>
     </LoginWrapper>

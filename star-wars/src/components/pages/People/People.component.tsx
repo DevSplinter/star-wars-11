@@ -21,13 +21,16 @@ import {
   LoadingWrapper,
 } from './People.styles';
 
-interface PeopleProps {}
-
-const People: React.FC<PeopleProps> = ({}) => {
-  const { people, getPeople, setPeople, arePeopleLoading, setPeopleLoading } = useFetchPeople();
+const People: React.FC = () => {
+  const { people, getPeople, setPeople, arePeopleLoading, setPeopleLoading } =
+    useFetchPeople();
   const { page, handlePageChange } = usePageChange(getPeople, people?.count);
   const { isFavourite, updateFavourites } = useFavourites();
-  const { searchText, setSearchText } = useSearch(setPeople, getPeople, setPeopleLoading);
+  const { searchText, setSearchText } = useSearch(
+    setPeople,
+    getPeople,
+    setPeopleLoading
+  );
   const history = useHistory();
 
   return (

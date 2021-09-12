@@ -52,7 +52,7 @@ export const Content = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  
+
   @media only screen and ${BREAKPOINTS.device.sm} {
     align-items: center;
   }

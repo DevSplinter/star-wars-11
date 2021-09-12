@@ -1,9 +1,7 @@
 import React from 'react';
 import { NotFoundWrapper, Header } from './NotFound.styles';
 
-interface NotFoundProps {}
-
-const NotFound: React.FC<NotFoundProps> = ({}) => {
+const NotFound: React.FC = () => {
   return (
     <NotFoundWrapper>
       <Header>404</Header>

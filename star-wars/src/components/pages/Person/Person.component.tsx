@@ -17,12 +17,11 @@ import Favourite from '../../atoms/Favourite';
 import { useFavourites } from '../../../hooks/useFavourites';
 import backButton from '../../../assets/backButton.svg';
 
-interface PersonProps {}
 type ParamsType = {
   id: string;
 };
 
-const Person: React.FC<PersonProps> = ({}) => {
+const Person: React.FC = () => {
   const { id } = useParams<ParamsType>();
   const { person, isPersonLoading } = useFetchPerson(id);
   const { filmsTitles } = useFetchFilms(person?.films || []);

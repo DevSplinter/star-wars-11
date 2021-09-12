@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IPerson } from '../../../types/types';
 import { fetchPerson } from '../../../services/peopleService';
 import { useHistory } from 'react-router-dom';
@@ -11,21 +11,25 @@ export const useFetchPerson = (id: string) => {
   const [isPersonLoading, setPersonLoading] = useState(false);
   const history = useHistory();
 
-  const getPerson = async (id: string) => {
-    try {
-      setPersonLoading(true);
-      const person = await fetchPerson(Number(id));
-      const personWithId = { ...person, id } as IPerson;
-      setPerson(personWithId);
-    } catch (error) {
-      history.push(`/not-found`);
-    } finally {
-      setPersonLoading(false);
-    }
-  };
+  const getPerson = useCallback(
+    async (id: string) => {
+      try {
+        setPersonLoading(true);
+        const person = await fetchPerson(Number(id));
+        const personWithId = { ...person, id } as IPerson;
+        setPerson(personWithId);
+      } catch (error) {
+        history.push(`/not-found`);
+      } finally {
+        setPersonLoading(false);
+      }
+    },
+    [history]
+  );
+
   useEffect(() => {
     getPerson(id);
-  }, []);
+  }, [getPerson, id]);
 
   return { person, isPersonLoading };
 };
@@ -34,7 +38,7 @@ export const useFetchFilms = (films: string[]) => {
   const [filmsTitles, setFilmsTitles] = useState<string[]>();
   const matches = useMediaQuery(BREAKPOINTS.device.md);
 
-  const getFilms = async () => {
+  const getFilms = useCallback(async () => {
     try {
       if (matches) {
         const filmsList = await Promise.all(
@@ -47,10 +51,10 @@ export const useFetchFilms = (films: string[]) => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [matches, films]);
 
   useEffect(() => {
     getFilms();
-  }, [films, matches]);
+  }, [films, matches, getFilms]);
   return { filmsTitles };
 };

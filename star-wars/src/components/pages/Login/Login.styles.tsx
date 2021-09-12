@@ -19,7 +19,7 @@ export const StyledForm = styled.form`
   flex-direction: column;
   justify-content: space-around;
   min-height: 250px;
-  
+
   @media only screen and ${BREAKPOINTS.device.sm} {
     align-items: flex-end;
   }
