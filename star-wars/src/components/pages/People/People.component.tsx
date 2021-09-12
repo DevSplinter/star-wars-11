@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFetchPeople, usePageChange, useSearch } from './People.hooks';
 import {
+  CircularProgress,
   Hidden,
   Table,
   TableBody,
@@ -17,15 +18,16 @@ import {
   StyledTableContainer,
   StyledPaper,
   StyledTextField,
+  LoadingWrapper,
 } from './People.styles';
 
 interface PeopleProps {}
 
 const People: React.FC<PeopleProps> = ({}) => {
-  const { people, getPeople, setPeople } = useFetchPeople();
+  const { people, getPeople, setPeople, arePeopleLoading, setPeopleLoading } = useFetchPeople();
   const { page, handlePageChange } = usePageChange(getPeople, people?.count);
   const { isFavourite, updateFavourites } = useFavourites();
-  const { searchText, setSearchText } = useSearch(setPeople, getPeople);
+  const { searchText, setSearchText } = useSearch(setPeople, getPeople, setPeopleLoading);
   const history = useHistory();
 
   return (
@@ -38,40 +40,48 @@ const People: React.FC<PeopleProps> = ({}) => {
         onChange={(event) => setSearchText(event.target.value)}
       />
       <StyledTableContainer>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Name</TableCell>
-              <TableCell align="center">Birth Year</TableCell>
-              <Hidden xsDown>
-                <TableCell align="center">Height</TableCell>
-              </Hidden>
-              <TableCell align="center">Favourite</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {people?.results?.map((person) => (
-              <TableRow
-                hover
-                key={person.url}
-                onClick={() => history.push(`${PATHS.CHARACTERS}/${person.id}`)}
-              >
-                <TableCell align="center">{person.name}</TableCell>
-                <TableCell align="center">{person.birth_year}</TableCell>
+        {arePeopleLoading ? (
+          <LoadingWrapper>
+            <CircularProgress color="secondary" />
+          </LoadingWrapper>
+        ) : (
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">Name</TableCell>
+                <TableCell align="center">Birth Year</TableCell>
                 <Hidden xsDown>
-                  <TableCell align="center">{person.height}</TableCell>
+                  <TableCell align="center">Height</TableCell>
                 </Hidden>
-                <TableCell align="center">
-                  <Favourite
-                    personId={person.id}
-                    updateFavourite={updateFavourites}
-                    isFavourite={isFavourite}
-                  />
-                </TableCell>
+                <TableCell align="center">Favourite</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {people?.results?.map((person) => (
+                <TableRow
+                  hover
+                  key={person.url}
+                  onClick={() =>
+                    history.push(`${PATHS.CHARACTERS}/${person.id}`)
+                  }
+                >
+                  <TableCell align="center">{person.name}</TableCell>
+                  <TableCell align="center">{person.birth_year}</TableCell>
+                  <Hidden xsDown>
+                    <TableCell align="center">{person.height}</TableCell>
+                  </Hidden>
+                  <TableCell align="center">
+                    <Favourite
+                      personId={person.id}
+                      updateFavourite={updateFavourites}
+                      isFavourite={isFavourite}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </StyledTableContainer>
       <TablePagination
         component="div"

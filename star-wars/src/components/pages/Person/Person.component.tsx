@@ -12,7 +12,7 @@ import {
   StyledImg,
   StyledIconButton,
 } from './Person.styles';
-import { Hidden } from '@material-ui/core';
+import { CircularProgress, Hidden } from '@material-ui/core';
 import Favourite from '../../atoms/Favourite';
 import { useFavourites } from '../../../hooks/useFavourites';
 import backButton from '../../../assets/backButton.svg';
@@ -24,8 +24,8 @@ type ParamsType = {
 
 const Person: React.FC<PersonProps> = ({}) => {
   const { id } = useParams<ParamsType>();
-  const person = useFetchPerson(id);
-  const filmsTitles = useFetchFilms(person?.films || []);
+  const { person, isPersonLoading } = useFetchPerson(id);
+  const { filmsTitles } = useFetchFilms(person?.films || []);
   const { isFavourite, updateFavourites } = useFavourites();
   const history = useHistory();
 
@@ -35,42 +35,48 @@ const Person: React.FC<PersonProps> = ({}) => {
 
   return (
     <StyledPaper>
-      <Header>
-        <StyledIconButton size="small" onClick={handleBack}>
-          <StyledImg src={backButton} alt="" />
-        </StyledIconButton>
-        <HeaderTitle>{person?.name}</HeaderTitle>
-        <Favourite
-          personId={id}
-          updateFavourite={updateFavourites}
-          isFavourite={isFavourite}
-          isLarge
-        />
-      </Header>
-      <ContentWrapper>
-        <div>
-          <SubHeader>Character details:</SubHeader>
-          <StyledUl>
-            <ListItem>birth year: {person?.birth_year}</ListItem>
-            <ListItem>gender: {person?.gender}</ListItem>
-            <ListItem>height: {person?.height}</ListItem>
-            <ListItem>mass: {person?.mass}</ListItem>
-            <ListItem>skin color: {person?.skin_color}</ListItem>
-            <ListItem>hair color: {person?.hair_color}</ListItem>
-            <ListItem>eye color: {person?.eye_color}</ListItem>
-          </StyledUl>
-        </div>
-        <Hidden smDown>
-          <div>
-            <SubHeader>Films:</SubHeader>
-            <StyledUl>
-              {filmsTitles?.map((title) => (
-                <ListItem key={title}>{title}</ListItem>
-              ))}
-            </StyledUl>
-          </div>
-        </Hidden>
-      </ContentWrapper>
+      {isPersonLoading ? (
+        <CircularProgress color="secondary" style={{ alignSelf: 'center' }} />
+      ) : (
+        <>
+          <Header>
+            <StyledIconButton size="small" onClick={handleBack}>
+              <StyledImg src={backButton} alt="" />
+            </StyledIconButton>
+            <HeaderTitle>{person?.name}</HeaderTitle>
+            <Favourite
+              personId={id}
+              updateFavourite={updateFavourites}
+              isFavourite={isFavourite}
+              isLarge
+            />
+          </Header>
+          <ContentWrapper>
+            <div>
+              <SubHeader>Character details:</SubHeader>
+              <StyledUl>
+                <ListItem>birth year: {person?.birth_year}</ListItem>
+                <ListItem>gender: {person?.gender}</ListItem>
+                <ListItem>height: {person?.height}</ListItem>
+                <ListItem>mass: {person?.mass}</ListItem>
+                <ListItem>skin color: {person?.skin_color}</ListItem>
+                <ListItem>hair color: {person?.hair_color}</ListItem>
+                <ListItem>eye color: {person?.eye_color}</ListItem>
+              </StyledUl>
+            </div>
+            <Hidden smDown>
+              <div>
+                <SubHeader>Films:</SubHeader>
+                <StyledUl>
+                  {filmsTitles?.map((title) => (
+                    <ListItem key={title}>{title}</ListItem>
+                  ))}
+                </StyledUl>
+              </div>
+            </Hidden>
+          </ContentWrapper>
+        </>
+      )}
     </StyledPaper>
   );
 };

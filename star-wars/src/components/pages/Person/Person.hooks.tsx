@@ -8,22 +8,26 @@ import BREAKPOINTS from '../../../const/breakpoints';
 
 export const useFetchPerson = (id: string) => {
   const [person, setPerson] = useState<IPerson>();
+  const [isPersonLoading, setPersonLoading] = useState(false);
   const history = useHistory();
 
   const getPerson = async (id: string) => {
     try {
+      setPersonLoading(true);
       const person = await fetchPerson(Number(id));
       const personWithId = { ...person, id } as IPerson;
       setPerson(personWithId);
     } catch (error) {
       history.push(`/not-found`);
+    } finally {
+      setPersonLoading(false);
     }
   };
   useEffect(() => {
     getPerson(id);
   }, []);
 
-  return person;
+  return { person, isPersonLoading };
 };
 
 export const useFetchFilms = (films: string[]) => {
@@ -48,5 +52,5 @@ export const useFetchFilms = (films: string[]) => {
   useEffect(() => {
     getFilms();
   }, [films, matches]);
-  return filmsTitles;
+  return { filmsTitles };
 };

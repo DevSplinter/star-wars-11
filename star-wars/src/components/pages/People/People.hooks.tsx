@@ -8,8 +8,11 @@ import { extractPersonId } from './People.utils';
 
 export const useFetchPeople = () => {
   const [people, setPeople] = useState<IPeople>();
+  const [arePeopleLoading, setPeopleLoading] = useState(false);
+
   const getPeople = async (url?: string) => {
     try {
+      setPeopleLoading(true);
       const people = url ? await fetchPeople(url) : await fetchPeople();
       const peopleWithIds = {
         ...people,
@@ -21,6 +24,8 @@ export const useFetchPeople = () => {
       setPeople(peopleWithIds);
     } catch (error) {
       console.error(error);
+    } finally {
+      setPeopleLoading(false);
     }
   };
 
@@ -28,7 +33,7 @@ export const useFetchPeople = () => {
     getPeople();
   }, []);
 
-  return { people, getPeople, setPeople };
+  return { people, getPeople, setPeople, arePeopleLoading, setPeopleLoading };
 };
 
 export const usePageChange = (
@@ -54,24 +59,32 @@ export const usePageChange = (
 
 export const useSearch = (
   setPeople: (people: IPeople) => void,
-  getPeople: (url?: string) => void
+  getPeople: (url?: string) => void,
+  setPeopleLoading: (isLoading: boolean) => void
 ) => {
   const [searchText, setSearchText] = useState('');
 
   const getSearchResult = async () => {
-    if (searchText !== '') {
-      const searchResponse = await fetchPeopleSearchResult(searchText);
-      const searchResponseWithIds = {
-        ...searchResponse,
-        results: searchResponse.results.map((person) => ({
-          ...person,
-          id: extractPersonId(person.url),
-        })),
-      } as IPeople;
+    try {
+      if (searchText !== '') {
+        setPeopleLoading(true);
+        const searchResponse = await fetchPeopleSearchResult(searchText);
+        const searchResponseWithIds = {
+          ...searchResponse,
+          results: searchResponse.results.map((person) => ({
+            ...person,
+            id: extractPersonId(person.url),
+          })),
+        } as IPeople;
 
-      setPeople(searchResponseWithIds);
-    } else {
-      getPeople();
+        setPeople(searchResponseWithIds);
+      } else {
+        getPeople();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setPeopleLoading(false);
     }
   };
 
