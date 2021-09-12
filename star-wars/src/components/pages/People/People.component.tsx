@@ -2,19 +2,22 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFetchPeople, usePageChange, useSearch } from './People.hooks';
 import {
-  Paper,
+  Hidden,
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
 } from '@material-ui/core';
 import Favourite from '../../atoms/Favourite';
 import { useFavourites } from '../../../hooks/useFavourites';
 import { PATHS } from '../../../const/paths';
+import {
+  StyledTableContainer,
+  StyledPaper,
+  StyledTextField,
+} from './People.styles';
 
 interface PeopleProps {}
 
@@ -22,25 +25,28 @@ const People: React.FC<PeopleProps> = ({}) => {
   const { people, getPeople, setPeople } = useFetchPeople();
   const { page, handlePageChange } = usePageChange(getPeople, people?.count);
   const { isFavourite, updateFavourites } = useFavourites();
-  const { searchText, setSearchText } = useSearch(setPeople);
+  const { searchText, setSearchText } = useSearch(setPeople, getPeople);
   const history = useHistory();
 
   return (
-    <Paper>
-      <TextField
+    <StyledPaper>
+      <StyledTextField
         label="Search"
+        placeholder="Search by name"
         variant="outlined"
         value={searchText}
         onChange={(event) => setSearchText(event.target.value)}
       />
-      <TableContainer>
+      <StyledTableContainer>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Birth Year</TableCell>
-              <TableCell>Height</TableCell>
-              <TableCell>Favourite</TableCell>
+              <TableCell align="center">Name</TableCell>
+              <TableCell align="center">Birth Year</TableCell>
+              <Hidden xsDown>
+                <TableCell align="center">Height</TableCell>
+              </Hidden>
+              <TableCell align="center">Favourite</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -50,10 +56,12 @@ const People: React.FC<PeopleProps> = ({}) => {
                 key={person.url}
                 onClick={() => history.push(`${PATHS.CHARACTERS}/${person.id}`)}
               >
-                <TableCell>{person.name}</TableCell>
-                <TableCell>{person.birth_year}</TableCell>
-                <TableCell>{person.height}</TableCell>
-                <TableCell>
+                <TableCell align="center">{person.name}</TableCell>
+                <TableCell align="center">{person.birth_year}</TableCell>
+                <Hidden xsDown>
+                  <TableCell align="center">{person.height}</TableCell>
+                </Hidden>
+                <TableCell align="center">
                   <Favourite
                     personId={person.id}
                     updateFavourite={updateFavourites}
@@ -64,7 +72,7 @@ const People: React.FC<PeopleProps> = ({}) => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </StyledTableContainer>
       <TablePagination
         component="div"
         count={people?.count || 0}
@@ -73,7 +81,7 @@ const People: React.FC<PeopleProps> = ({}) => {
         rowsPerPage={10}
         rowsPerPageOptions={[10]}
       />
-    </Paper>
+    </StyledPaper>
   );
 };
 

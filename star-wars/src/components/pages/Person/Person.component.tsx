@@ -1,10 +1,21 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useFetchFilms, useFetchPerson } from './Person.hooks';
-import { PersonWrapper } from './Person.styles';
+import {
+  Header,
+  HeaderTitle,
+  ContentWrapper,
+  StyledPaper,
+  StyledUl,
+  ListItem,
+  SubHeader,
+  StyledImg,
+  StyledIconButton,
+} from './Person.styles';
 import { Hidden } from '@material-ui/core';
 import Favourite from '../../atoms/Favourite';
 import { useFavourites } from '../../../hooks/useFavourites';
+import backButton from '../../../assets/backButton.svg';
 
 interface PersonProps {}
 type ParamsType = {
@@ -16,34 +27,51 @@ const Person: React.FC<PersonProps> = ({}) => {
   const person = useFetchPerson(id);
   const filmsTitles = useFetchFilms(person?.films || []);
   const { isFavourite, updateFavourites } = useFavourites();
+  const history = useHistory();
+
+  const handleBack = () => {
+    history.goBack();
+  };
 
   return (
-    <PersonWrapper>
-      <h1>
-        {person?.name}
+    <StyledPaper>
+      <Header>
+        <StyledIconButton size="small" onClick={handleBack}>
+          <StyledImg src={backButton} alt="" />
+        </StyledIconButton>
+        <HeaderTitle>{person?.name}</HeaderTitle>
         <Favourite
           personId={id}
           updateFavourite={updateFavourites}
           isFavourite={isFavourite}
+          isLarge
         />
-      </h1>
-      <h2>Character details:</h2>
-      <ul>
-        <li>gender: {person?.gender}</li>
-        <li>height: {person?.height}</li>
-        <li>mass: {person?.mass}</li>
-        <li>skin color: {person?.skin_color}</li>
-        <li>hair color: {person?.hair_color}</li>
-      </ul>
-      <Hidden mdDown>
-        <h2>Films</h2>
-        <ul>
-          {filmsTitles?.map((title) => (
-            <li key={title}>{title}</li>
-          ))}
-        </ul>
-      </Hidden>
-    </PersonWrapper>
+      </Header>
+      <ContentWrapper>
+        <div>
+          <SubHeader>Character details:</SubHeader>
+          <StyledUl>
+            <ListItem>birth year: {person?.birth_year}</ListItem>
+            <ListItem>gender: {person?.gender}</ListItem>
+            <ListItem>height: {person?.height}</ListItem>
+            <ListItem>mass: {person?.mass}</ListItem>
+            <ListItem>skin color: {person?.skin_color}</ListItem>
+            <ListItem>hair color: {person?.hair_color}</ListItem>
+            <ListItem>eye color: {person?.eye_color}</ListItem>
+          </StyledUl>
+        </div>
+        <Hidden smDown>
+          <div>
+            <SubHeader>Films:</SubHeader>
+            <StyledUl>
+              {filmsTitles?.map((title) => (
+                <ListItem key={title}>{title}</ListItem>
+              ))}
+            </StyledUl>
+          </div>
+        </Hidden>
+      </ContentWrapper>
+    </StyledPaper>
   );
 };
 

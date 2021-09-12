@@ -52,7 +52,10 @@ export const usePageChange = (
   return { page, handlePageChange };
 };
 
-export const useSearch = (setPeople: (people: IPeople) => void) => {
+export const useSearch = (
+  setPeople: (people: IPeople) => void,
+  getPeople: (url?: string) => void
+) => {
   const [searchText, setSearchText] = useState('');
 
   const getSearchResult = async () => {
@@ -67,6 +70,8 @@ export const useSearch = (setPeople: (people: IPeople) => void) => {
       } as IPeople;
 
       setPeople(searchResponseWithIds);
+    } else {
+      getPeople();
     }
   };
 

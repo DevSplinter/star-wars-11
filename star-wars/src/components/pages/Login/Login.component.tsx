@@ -1,6 +1,6 @@
 import React from 'react';
-import { LoginWrapper, StyledForm } from './Login.styles';
-import { Button, Card, TextField } from '@material-ui/core';
+import { LoginWrapper, StyledCard, StyledForm, Header } from './Login.styles';
+import { Button, TextField } from '@material-ui/core';
 import { useLogin } from './Login.hooks';
 
 interface LoginProps {}
@@ -18,8 +18,8 @@ const Login: React.FC<LoginProps> = () => {
 
   return (
     <LoginWrapper>
-      <Card>
-        <h1>Login to continue</h1>
+      <StyledCard>
+        <Header>Login to continue</Header>
         <StyledForm>
           <TextField
             error={isError}
@@ -27,6 +27,7 @@ const Login: React.FC<LoginProps> = () => {
             variant="outlined"
             helperText={isError && helperText}
             value={login}
+            fullWidth
             onChange={handleLoginChange}
           />
           <TextField
@@ -36,11 +37,12 @@ const Login: React.FC<LoginProps> = () => {
             helperText={isError && helperText}
             value={password}
             type="password"
+            fullWidth
             onChange={handlePasswordChange}
           />
-          <Button onClick={handleOnSubmit}>Login</Button>
+          <Button onClick={handleOnSubmit} variant="outlined" size="large">Login</Button>
         </StyledForm>
-      </Card>
+      </StyledCard>
     </LoginWrapper>
   );
 };

@@ -3,7 +3,7 @@ import { CREDENTIALS } from '../const/credentials';
 import { ISignIn } from '../types/types';
 
 export const useAuth = () => {
-  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [isAuthenticated, setAuthenticated] = useState(true);
 
   const signIn = ({ login, password }: ISignIn): boolean => {
     if (login === CREDENTIALS.LOGIN && password === CREDENTIALS.PASSWORD) {

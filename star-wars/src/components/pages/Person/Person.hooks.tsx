@@ -3,6 +3,8 @@ import { IPerson } from '../../../types/types';
 import { fetchPerson } from '../../../services/peopleService';
 import { useHistory } from 'react-router-dom';
 import { fetchFilm } from '../../../services/filmsService';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import BREAKPOINTS from '../../../const/breakpoints';
 
 export const useFetchPerson = (id: string) => {
   const [person, setPerson] = useState<IPerson>();
@@ -26,13 +28,18 @@ export const useFetchPerson = (id: string) => {
 
 export const useFetchFilms = (films: string[]) => {
   const [filmsTitles, setFilmsTitles] = useState<string[]>();
+  const matches = useMediaQuery(BREAKPOINTS.device.md);
 
   const getFilms = async () => {
     try {
-      const filmsList = await Promise.all(films.map((film) => fetchFilm(film)));
-      const extractedFilmsTitles = filmsList.map(({ title }) => title);
+      if (matches) {
+        const filmsList = await Promise.all(
+          films.map((film) => fetchFilm(film))
+        );
+        const extractedFilmsTitles = filmsList.map(({ title }) => title);
 
-      setFilmsTitles(extractedFilmsTitles);
+        setFilmsTitles(extractedFilmsTitles);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -40,6 +47,6 @@ export const useFetchFilms = (films: string[]) => {
 
   useEffect(() => {
     getFilms();
-  }, [films]);
+  }, [films, matches]);
   return filmsTitles;
 };

@@ -15,6 +15,9 @@ function App() {
     palette: {
       type: 'dark',
     },
+    typography: {
+      fontFamily: 'Arial',
+    },
     overrides: {
       MuiTextField: {
         root: {

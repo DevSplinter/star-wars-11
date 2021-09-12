@@ -8,7 +8,7 @@ import {
 import Login from './pages/Login';
 import People from './pages/People';
 import Person from './pages/Person';
-import NotFound from './pages/notFound';
+import NotFound from './pages/NotFound';
 import PrivateRoute from './PrivateRoute';
 import { PATHS } from '../const/paths';
 
