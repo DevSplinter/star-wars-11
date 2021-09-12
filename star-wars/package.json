@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",
+    "@types/styled-components": "^5.1.14",
     "prettier": "2.3.2"
   },
   "prettier": {
